@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script async src="https://cdn.ampproject.org/v0.js"></script>
+		<title>Your link</title>
+		<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+		<script type="application/ld+json">
+			{
+				"@context": "http://schema.org",
+				"@type": "NewsArticle",
+				"headline": "Open-source framework for publishing content",
+				"datePublished": "2015-10-07T12:02:41Z",
+				"image": [
+				"logo.jpg"
+				]
+			}
+		</script>
+		<link rel="stylesheet" href="https://newcss.net/lite.css">
+		<link rel="stylesheet" href="https://newcss.net/theme/night.css">
+		<script>
+			function copyLink() {
+  				const copyText = document.getElementById("link");
+  				copyText.select();
+  				document.execCommand("copy");
+
+				let info = document.getElementById("info");
+				info.textContent = "Copied!";
+}
+		</script>
+
+	</head>
+	<body>
+		<input type="text" value="{{.}}" id="link"/>
+		<button onclick="copyLink()">Copy link</button>
+		<div id="info"></div>
+	</body>
+</html>
