@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"strings"
 	"sync"
@@ -50,6 +51,12 @@ func readLinks(path string) {
 }
 
 func addLink(link string, toSave chan<- string) string {
+	u, err := url.Parse(link)
+	if err != nil {
+		log.Printf("Error parsing link: %s", err)
+	}
+	link = u.String()
+
 	linkID := getHash(link)
 
 	existingLink, loaded := links.LoadOrStore(linkID, link)
