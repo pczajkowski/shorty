@@ -11,6 +11,7 @@ import (
 const (
 	shortenPath = "/s/"
 	decodePath  = "/d/"
+	indexHTML   = "./html/index.html"
 )
 
 var host = flag.String("h", "localhost", "Host on which to serve")
@@ -62,22 +63,17 @@ func decode(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, "Not found!")
 }
 
-func serveIndex(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("./html/index.html"))
-	t.Execute(w, nil)
-}
-
 func redirectOrServe(w http.ResponseWriter, r *http.Request) {
 	linkID := strings.TrimPrefix(r.URL.Path, "/")
 
 	if linkID == "" {
-		serveIndex(w, r)
+		http.ServeFile(w, r, indexHTML)
 	} else {
 		link := getLink(linkID)
 		if link != "" {
 			http.Redirect(w, r, link, http.StatusMovedPermanently)
 		} else {
-			serveIndex(w, r)
+			http.ServeFile(w, r, indexHTML)
 		}
 	}
 }
