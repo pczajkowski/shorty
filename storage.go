@@ -39,13 +39,13 @@ func readLinks(path string) {
 
 		parts := strings.Split(line, "<>")
 		if len(parts) != 2 {
-			log.Fatalf("Wrong line format: %s", line)
+			log.Printf("Wrong line format: %s", line)
 		}
 
 		links.Store(parts[0], parts[1])
 	}
 	if err := scanner.Err(); err != nil {
-		log.Fatalf("Scanner error: %s", err)
+		log.Printf("Scanner error: %s", err)
 	}
 
 }
@@ -94,7 +94,7 @@ func saveLink(path string, toSave <-chan string) {
 
 	for item := range toSave {
 		if _, err := file.WriteString(item); err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 	}
 }
