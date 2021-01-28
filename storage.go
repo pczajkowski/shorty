@@ -17,7 +17,7 @@ const (
 var links sync.Map
 
 func readLinks(path string) {
-	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDONLY, 0644)
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDONLY, 0600)
 	if err != nil {
 		log.Fatalf("Failed to open %s!\n", path)
 
@@ -81,7 +81,7 @@ func getLink(linkID string) string {
 }
 
 func saveLink(path string, toSave <-chan string) {
-	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
