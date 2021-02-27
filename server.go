@@ -66,16 +66,15 @@ func decode(w http.ResponseWriter, r *http.Request) {
 func redirectOrServe(w http.ResponseWriter, r *http.Request) {
 	linkID := strings.TrimPrefix(r.URL.Path, "/")
 
-	if linkID == "" {
-		http.ServeFile(w, r, indexHTML)
-	} else {
+	if linkID != "" {
 		link := getLink(linkID)
 		if link != "" {
 			http.Redirect(w, r, link, http.StatusMovedPermanently)
-		} else {
-			http.ServeFile(w, r, indexHTML)
+			return
 		}
 	}
+
+	http.ServeFile(w, r, indexHTML)
 }
 
 func main() {
