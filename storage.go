@@ -64,10 +64,11 @@ func addLink(link string, toSave chan<- string) string {
 		if existingLink != link {
 			log.Printf("Have collision:\n%s\n%s\n", link, existingLink)
 		}
-	} else {
-		toSave <- fmt.Sprintf(format, linkID, link)
+
+		return linkID
 	}
 
+	toSave <- fmt.Sprintf(format, linkID, link)
 	return linkID
 }
 
