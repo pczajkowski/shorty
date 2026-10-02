@@ -20,6 +20,8 @@ var file = flag.String("f", "links.txt", "File to which save links")
 var domain = flag.String("d", "", "Domain of shorty, preferably add schema")
 
 var toSave chan string
+var errorTemplate *template.Template = template.Must(template.ParseFiles("./html/error.html"))
+var resultTemplate *template.Template = template.Must(template.ParseFiles("./html/result.html"))
 
 func init() {
 	toSave = make(chan string, 100)
@@ -27,8 +29,7 @@ func init() {
 
 func returnErorr(w http.ResponseWriter, err string) {
 	w.WriteHeader(http.StatusBadRequest)
-	t := template.Must(template.ParseFiles("./html/error.html"))
-	t.Execute(w, err)
+	errorTemplate.Execute(w, err)
 }
 
 func shorten(w http.ResponseWriter, r *http.Request) {
@@ -43,13 +44,12 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t := template.Must(template.ParseFiles("./html/result.html"))
-
 	shortened := r.Host + "/" + linkID
 	if *domain != "" {
 		shortened = *domain + "/" + linkID
 	}
-	t.Execute(w, shortened)
+
+	resultTemplate.Execute(w, shortened)
 }
 
 func decode(w http.ResponseWriter, r *http.Request) {
@@ -58,19 +58,17 @@ func decode(w http.ResponseWriter, r *http.Request) {
 		link = strings.TrimPrefix(r.URL.Path, shortenPath)
 	}
 
-	t := template.Must(template.ParseFiles("./html/result.html"))
-
 	parts := strings.Split(link, "/")
 	linkID := parts[len(parts)-1]
 	if linkID != "" {
 		fullLink := getLink(linkID)
 		if fullLink != "" {
-			t.Execute(w, fullLink)
+			resultTemplate.Execute(w, fullLink)
 			return
 		}
 	}
 
-	t.Execute(w, "Not found!")
+	returnErorr(w, "Not found!")
 }
 
 func redirectOrServe(w http.ResponseWriter, r *http.Request) {
