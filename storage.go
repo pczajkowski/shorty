@@ -50,10 +50,12 @@ func readLinks(path string) {
 
 }
 
-func addLink(link string, toSave chan<- string) string {
+func addLink(link string, toSave chan<- string) (bool, string) {
 	u, err := url.Parse(link)
 	if err != nil {
-		log.Printf("Error parsing link: %s", err)
+		m := fmt.Sprintf("Error parsing link: %s", err)
+		log.Println(m)
+		return false, m
 	}
 	link = u.String()
 
@@ -62,14 +64,16 @@ func addLink(link string, toSave chan<- string) string {
 	existingLink, loaded := links.LoadOrStore(linkID, link)
 	if loaded {
 		if existingLink != link {
-			log.Printf("Have collision:\n%s\n%s\n", link, existingLink)
+			m := "Can't add link."
+			log.Println(m)
+			return false, m
 		}
 
-		return linkID
+		return true, linkID
 	}
 
 	toSave <- fmt.Sprintf(format, linkID, link)
-	return linkID
+	return true, linkID
 }
 
 func getLink(linkID string) string {

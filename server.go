@@ -25,13 +25,23 @@ func init() {
 	toSave = make(chan string, 100)
 }
 
+func returnErorr(w http.ResponseWriter, err string) {
+	w.WriteHeader(http.StatusNotFound)
+	t := template.Must(template.ParseFiles("./html/error.html"))
+	t.Execute(w, err)
+}
+
 func shorten(w http.ResponseWriter, r *http.Request) {
 	link := r.URL.Query().Get("link")
 	if link == "" {
 		link = strings.TrimPrefix(r.URL.Path, shortenPath)
 	}
 
-	linkID := addLink(link, toSave)
+	addStatus, linkID := addLink(link, toSave)
+	if !addStatus {
+		returnErorr(w, linkID)
+		return
+	}
 
 	t := template.Must(template.ParseFiles("./html/result.html"))
 
