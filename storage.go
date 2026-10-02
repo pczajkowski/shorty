@@ -37,7 +37,7 @@ func readLinks(path string) {
 			break
 		}
 
-		parts := strings.Split(line, "<>")
+		parts := strings.SplitN(line, "<>", 2)
 		if len(parts) != 2 {
 			log.Printf("Wrong line format: %s", line)
 		}
