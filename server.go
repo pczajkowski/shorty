@@ -26,7 +26,7 @@ func init() {
 }
 
 func returnErorr(w http.ResponseWriter, err string) {
-	w.WriteHeader(http.StatusNotFound)
+	w.WriteHeader(http.StatusBadRequest)
 	t := template.Must(template.ParseFiles("./html/error.html"))
 	t.Execute(w, err)
 }
