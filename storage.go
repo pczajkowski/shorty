@@ -34,7 +34,7 @@ func readLinks(path string) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if line == "" {
-			break
+			continue
 		}
 
 		parts := strings.SplitN(line, "<>", 2)
