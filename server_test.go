@@ -114,7 +114,7 @@ func TestRedirectOrServe(t *testing.T) {
 func TestReturnErrorEscapesHTML(t *testing.T) {
 	message := `<script>alert("oops")</script>`
 	w := httptest.NewRecorder()
-	returnErorr(w, message)
+	returnError(w, message)
 	if w.Code != http.StatusBadRequest || !strings.Contains(w.Body.String(), html.EscapeString(message)) {
 		t.Fatalf("status = %d, body = %s", w.Code, w.Body.String())
 	}
