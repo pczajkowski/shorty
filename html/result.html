@@ -22,10 +22,12 @@
 			function copyLink() {
   				const copyText = document.getElementById("link");
   				copyText.select();
-  				document.execCommand("copy");
+				navigator.clipboard.writeText(copyText.value)
+				    .then(() => info.textContent = "Copied!")
+				    .catch(err => console.error(err));
 
-				let info = document.getElementById("info");
-				info.textContent = "Copied!";
+				//let info = document.getElementById("info");
+				//info.textContent = "Copied!";
 }
 		</script>
 
