@@ -50,6 +50,8 @@ func readLinks(path string) {
 
 }
 
+const errCollision = "Can't add link: hash collision"
+
 func addLink(link string, toSave chan<- string) (bool, string) {
 	u, err := url.Parse(link)
 	if err != nil {
@@ -64,9 +66,8 @@ func addLink(link string, toSave chan<- string) (bool, string) {
 	existingLink, loaded := links.LoadOrStore(linkID, link)
 	if loaded {
 		if existingLink != link {
-			m := "Can't add link."
-			log.Println(m)
-			return false, m
+			log.Println(errCollision)
+			return false, errCollision
 		}
 
 		return true, linkID

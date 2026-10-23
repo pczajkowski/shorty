@@ -55,7 +55,7 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 func decode(w http.ResponseWriter, r *http.Request) {
 	link := r.URL.Query().Get("link")
 	if link == "" {
-		link = strings.TrimPrefix(r.URL.Path, shortenPath)
+		link = strings.TrimPrefix(r.URL.Path, decodePath)
 	}
 
 	parts := strings.Split(link, "/")
