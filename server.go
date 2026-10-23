@@ -27,8 +27,8 @@ func init() {
 	toSave = make(chan string, 100)
 }
 
-func returnError(w http.ResponseWriter, err string) {
-	w.WriteHeader(http.StatusBadRequest)
+func returnError(w http.ResponseWriter, err string, statusCode int) {
+	w.WriteHeader(statusCode)
 	errorTemplate.Execute(w, err)
 }
 
@@ -40,7 +40,7 @@ func shorten(w http.ResponseWriter, r *http.Request) {
 
 	addStatus, linkID := addLink(link, toSave)
 	if !addStatus {
-		returnError(w, linkID)
+		returnError(w, linkID, http.StatusBadRequest)
 		return
 	}
 
@@ -68,7 +68,7 @@ func decode(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	returnError(w, "Not found!")
+	returnError(w, "Not found!", http.StatusNotFound)
 }
 
 func redirectOrServe(w http.ResponseWriter, r *http.Request) {

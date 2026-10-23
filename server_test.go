@@ -81,7 +81,7 @@ func TestDecodeMissing(t *testing.T) {
 			resetServer(t)
 			w := httptest.NewRecorder()
 			decode(w, httptest.NewRequest(http.MethodGet, target, nil))
-			if w.Code != http.StatusBadRequest || !strings.Contains(w.Body.String(), "Not found!") {
+			if w.Code != http.StatusNotFound || !strings.Contains(w.Body.String(), "Not found!") {
 				t.Fatalf("status = %d, body = %s", w.Code, w.Body.String())
 			}
 		})
@@ -114,7 +114,7 @@ func TestRedirectOrServe(t *testing.T) {
 func TestReturnErrorEscapesHTML(t *testing.T) {
 	message := `<script>alert("oops")</script>`
 	w := httptest.NewRecorder()
-	returnError(w, message)
+	returnError(w, message, http.StatusBadRequest)
 	if w.Code != http.StatusBadRequest || !strings.Contains(w.Body.String(), html.EscapeString(message)) {
 		t.Fatalf("status = %d, body = %s", w.Code, w.Body.String())
 	}
